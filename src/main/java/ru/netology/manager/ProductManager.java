@@ -1,46 +1,25 @@
 package ru.netology.manager;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import ru.netology.domain.Book;
-import ru.netology.domain.Product;
-import ru.netology.domain.Smartphone;
-import ru.netology.repository.ProductRepository;
+import domain.Book;
+import domain.Product;
+import domain.Smartphone;
+import repository.ProductRepository;
 
-@AllArgsConstructor
-@Data
 public class ProductManager {
+
     private ProductRepository repository;
 
-    public void add(Product item) {
-        repository.save(item);
+    public ProductManager(ProductRepository repository) {
+        this.repository = repository;
     }
 
-    public Product[] getAll() {
-        return repository.findAll();
-    }
-
-    public boolean matches(Product product, String search) {
-        if (product instanceof Book) {
-            Book book = (Book) product;
-            if (book.getName().equalsIgnoreCase(search)) {
-                return true;
-            }
-            return book.getAuthor().equalsIgnoreCase(search);
-        }
-        if (product instanceof Smartphone) {
-            Smartphone smart = (Smartphone) product;
-            if (smart.getName().equalsIgnoreCase(search)) {
-                return true;
-            }
-            return smart.getManufacturer().equalsIgnoreCase(search);
-        }
-        return false;
+    public void add(Product product) {
+        repository.save(product);
     }
 
     public Product[] searchBy(String text) {
         Product[] result = new Product[0];
-        for (Product product : repository.findAll()) {
+        for (Product product: repository.findAll()) {
             if (matches(product, text)) {
                 Product[] tmp = new Product[result.length + 1];
                 System.arraycopy(result, 0, tmp, 0, result.length);
@@ -49,5 +28,32 @@ public class ProductManager {
             }
         }
         return result;
+    }
+
+    public boolean matches(Product product, String search) {
+        if (product instanceof Book) {
+            Book book = (Book) product;
+            if (book.getName().equalsIgnoreCase(search)) {
+                return true;
+            }
+            if (book.getAuthor().equalsIgnoreCase(search)) {
+                return true;
+            }
+            return false;
+        }
+        if (product instanceof Smartphone) {
+            Smartphone smartphone = (Smartphone) product;
+            if (smartphone.getName().equalsIgnoreCase(search)) {
+                return true;
+            }
+            if (smartphone.getMaker().equalsIgnoreCase(search)) {
+                return true;
+            }
+            return false;
+        }
+        if (product.getName().equalsIgnoreCase(search)) {
+            return true;
+        }
+        return false;
     }
 }
