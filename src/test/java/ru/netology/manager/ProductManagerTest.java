@@ -1,69 +1,95 @@
 package ru.netology.manager;
 
+import domain.Book;
+import domain.Product;
+import domain.Smartphone;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.netology.domain.Book;
-import ru.netology.domain.Product;
-import ru.netology.domain.Smartphone;
-import ru.netology.repository.ProductRepository;
+import repository.ProductRepository;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
-class ProductManagerTest {
+public class ProductManagerTest {
     private ProductRepository repository = new ProductRepository();
-    ProductManager manager = new ProductManager(repository);
-    private Product item1 = new Book(1, 200, "Harry Potter", "J.K.Rowling");
-    private Product item2 = new Book(2, 400, "Mary Poppins", "Pamela Lyndon Travers");
-    private Product item3 = new Smartphone(3, 1000, "Galaxy A31", "Samsung");
-    private Product item4 = new Smartphone(4, 500, "А35", "Siemens");
-
-    @BeforeEach
-    void setUp() {
-        repository.save(item1);
-        repository.save(item2);
-        repository.save(item3);
-        repository.save(item4);
+    private ProductManager manager = new ProductManager(repository);
+    private Book first = new Book(1, "Java1", 10000, "Author1");
+    private Book second = new Book(2, "Java2", 1500, "Author2");
+    private Smartphone third = new Smartphone(3, "CallPhone1", 10000, "Maker1");
+    private Smartphone fourth = new Smartphone(4, "CallPhone2", 10000, "Maker2");
+    private Product fifth = new Product(5, "Love", 1);
+    
+     @BeforeEach
+    public void setUp() {
+        repository.save(first);
+        repository.save(second);
+        repository.save(third);
+        repository.save(fourth);
+        repository.save(fifth);
     }
-
+    
     @Test
     public void shouldGetAll() {
-        Product[] expected = new Product[]{item1, item2, item3, item4};
-        Product[] actual = manager.getAll();
+        Product[] actual = repository.findAll();
+        Product[] expected = new Product[]{first, second, third, fourth, fifth};
         assertArrayEquals(expected, actual);
     }
 
     @Test
-    public void shouldSearchByAuthor() {
-        Product[] expected = new Product[]{item2};
-        Product[] actual = manager.searchBy("Pamela Lyndon Travers");
+    public void shouldSearchByBooksName() {
+        Product[] actual = manager.searchBy("Java1");
+        Product[] expected = new Product[]{first};
+        assertArrayEquals(expected, actual);
+    }
+    
+    @Test
+    public void shouldSearchByBooksAuthor() {
+        Product[] actual = manager.searchBy("Author2");
+        Product[] expected = new Product[]{second};
         assertArrayEquals(expected, actual);
     }
 
     @Test
-    public void shouldSearchByBookName() {
-        Product[] expected = new Product[]{item1};
-        Product[] actual = manager.searchBy("Harry Potter");
+    public void shouldSearchBySmartphonesName() {
+        Product[] actual = manager.searchBy("CallPhone1");
+        Product[] expected = new Product[]{third};
         assertArrayEquals(expected, actual);
     }
 
     @Test
-    public void shouldSearchByPhoneName() {
-        Product[] expected = new Product[]{item3};
-        Product[] actual = manager.searchBy("Galaxy A31");
+    public void shouldSearchBySmartphonesMaker() {
+        Product[] actual = manager.searchBy("Maker2");
+        Product[] expected = new Product[]{fourth};
         assertArrayEquals(expected, actual);
     }
 
     @Test
-    public void shouldSearchByManufacturer() {
-        Product[] expected = new Product[]{item4};
-        Product[] actual = manager.searchBy("Siemens");
+    public void shouldSearchByProducts() {
+        Product[] actual = manager.searchBy("Love");
+        Product[] expected = new Product[]{fifth};
         assertArrayEquals(expected, actual);
     }
 
     @Test
-    public void shouldSearchByAuthorNegative() {
-        Product[] expected = {};
-        Product[] actual = manager.searchBy("Victor Pelevin");
+    public void shouldNotSearchName() {
+        Product[] actual = manager.searchBy("Nothing");
+        Product[] expected = new Product[]{};
+        assertArrayEquals(expected, actual);
+    }
+
+    @Test
+    public void shouldAddNewProduct() {
+        Product sixth = new Product(6, "Smartness", 123456);
+        manager.add(sixth);
+        Product[] actual = repository.findAll();
+        Product[] expected = new Product[]{first, second, third, fourth, fifth, sixth};
+        assertArrayEquals(expected, actual);
+    }
+    
+    @Test
+    public void shouldRemoveById() {
+        repository.removeById(2);
+        Product[] actual = repository.findAll();
+        Product[] expected = new Product[]{first, third, fourth, fifth};
         assertArrayEquals(expected, actual);
     }
 }
