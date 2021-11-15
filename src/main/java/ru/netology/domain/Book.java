@@ -12,8 +12,12 @@ import lombok.EqualsAndHashCode;
 public class Book extends Product {
     private String author;
 
-    public Book(int id, int price, String name, String author) {
-        super(id, price, name);
+    public Book(int id, String name, int price, String author) {
+        super(id, name, price);
+        this.author = author;
+    }
+
+    public Book(String author) {
         this.author = author;
     }
 }
