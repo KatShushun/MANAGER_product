@@ -1,14 +1,15 @@
 package ru.netology.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.EqualsAndHashCode;
+import lombok.Setter;
 
+import java.util.Objects;
+
+@Getter
+@Setter
 @NoArgsConstructor
-@AllArgsConstructor
-@Data
-@EqualsAndHashCode(callSuper = true)
+
 public class Smartphone extends Product{
     private String maker;
 
