@@ -1,15 +1,16 @@
 package ru.netology.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.EqualsAndHashCode;
+import lombok.Setter;
 
+import java.util.Objects;
+
+@Getter
+@Setter
 @NoArgsConstructor
-@AllArgsConstructor
-@Data
-@EqualsAndHashCode(callSuper = true)
-public class Book extends Product {
+
+public class Book extends Product{
     private String author;
 
     public Book(int id, String name, int price, String author) {
