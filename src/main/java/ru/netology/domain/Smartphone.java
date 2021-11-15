@@ -9,11 +9,15 @@ import lombok.EqualsAndHashCode;
 @AllArgsConstructor
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class Smartphone extends Product {
-    private String manufacturer;
+public class Smartphone extends Product{
+    private String maker;
 
-    public Smartphone(int id, int price, String name, String manufacturer) {
-        super(id, price, name);
-        this.manufacturer = manufacturer;
+    public Smartphone(int id, String name, int price, String maker) {
+        super(id, name, price);
+        this.maker = maker;
+    }
+
+    public Smartphone(String maker) {
+        this.maker = maker;
     }
 }
