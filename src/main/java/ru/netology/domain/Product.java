@@ -1,16 +1,21 @@
 package ru.netology.domain;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@AllArgsConstructor
+import java.util.Objects;
+
+@Getter
+@Setter
 @NoArgsConstructor
-@Data
+@AllArgsConstructor
+
 public class Product {
     private int id;
-    private int price;
     private String name;
+    private int price;
 
     @Override
     public boolean equals(Object o) {
